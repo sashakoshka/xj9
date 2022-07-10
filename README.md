@@ -6,7 +6,15 @@ Jenny Wakeman from My Life as a Teenage Robot, right on your desktop!
 
 All included images were drawn by me.
 
-# Building and running
+## Capabilities
+
+Jenny can:
+
+- Stare into your soul
+- Look at your mouse cursor
+- Sleep
+
+## Building and running
 
 Run `go run .` to build and run. Run `go build` to get an executable.
 
