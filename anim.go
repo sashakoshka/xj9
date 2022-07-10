@@ -18,8 +18,14 @@ type Keyframe struct {
 type Animation []Keyframe
 
 type State struct {
-	intro Animation
-	main  Animation
+	intro    Animation
+	main     Animation
+	
+	// how interested jenny is in doing this thing
+	interest int
+
+	// random variance of her interest
+	variance int
 }
 
 var states = make(map[StateID] *State)
@@ -43,35 +49,7 @@ func setState (stateID StateID) {
 		playhead.pastIntro = true
 	}
 
-	// how interested jenny is in doing each of these things
-	setInterest(10)
-	switch (stateID) {
-	case stateIDIdle:
-		setInterest(2)
-		
-	case stateIDSleeping:
-		setInterest(4)
-		
-	case stateIDLook,
-	stateIDLookN,
-	stateIDLookS,
-	stateIDLookE,
-	stateIDLookW,
-	stateIDLookNE,
-	stateIDLookSE,
-	stateIDLookNW,
-	stateIDLookSW:
-		setInterest(1)
-		
-	case stateIDWalkE, stateIDWalkW:
-		setInterest(8)
-
-	case stateIDRocketN:
-		setInterest(3)
-		
-	case stateIDFallS:
-		setInterest(2)
-	}
+	setInterest(playhead.current.interest)
 }
 
 func currentAnimation () (animation Animation) {
@@ -176,6 +154,9 @@ func loadStates () {
 				picture:  loadPicture("idle1.png"),
 			},
 		},
+
+		interest: 10,
+		variance: 10,
 	}
 	
 	states[stateIDSleeping] = &State {
@@ -189,30 +170,37 @@ func loadStates () {
 				picture:  loadPicture("sleep1.png"),
 			},
 		},
+
+		interest: 40,
+		variance: 20,
 	}
 
-	states[stateIDLook]   = singleFrameState("look.png")
-	states[stateIDLookN]  = singleFrameState("lookN.png")
-	states[stateIDLookS]  = singleFrameState("lookS.png")
-	states[stateIDLookE]  = singleFrameState("lookE.png")
-	states[stateIDLookW]  = singleFrameState("lookW.png")
-	states[stateIDLookNE] = singleFrameState("lookNE.png")
-	states[stateIDLookSE] = singleFrameState("lookSE.png")
-	states[stateIDLookNW] = singleFrameState("lookNW.png")
-	states[stateIDLookSW] = singleFrameState("lookSW.png")
+	states[stateIDLook]   = singleFrameState("look.png",   1, 0)
+	states[stateIDLookN]  = singleFrameState("lookN.png",  1, 0)
+	states[stateIDLookS]  = singleFrameState("lookS.png",  1, 0)
+	states[stateIDLookE]  = singleFrameState("lookE.png",  1, 0)
+	states[stateIDLookW]  = singleFrameState("lookW.png",  1, 0)
+	states[stateIDLookNE] = singleFrameState("lookNE.png", 1, 0)
+	states[stateIDLookSE] = singleFrameState("lookSE.png", 1, 0)
+	states[stateIDLookNW] = singleFrameState("lookNW.png", 1, 0)
+	states[stateIDLookSW] = singleFrameState("lookSW.png", 1, 0)
 
 	walkDelay := 200 * time.Millisecond
 	
 	states[stateIDWalkE] = &State {
 		main: cyclicAnimation("walkE", 4, walkDelay, pixel.V(16, 0)),
+		interest: 5,
+		variance: 5,
 	}
 
 	states[stateIDWalkW] = &State {
 		main: cyclicAnimation("walkW", 4, walkDelay, pixel.V(-16, 0)),
+		interest: 5,
+		variance: 5,
 	}
 }
 
-func singleFrameState (path string) (state *State) {
+func singleFrameState (path string, interest, variance int) (state *State) {
 	return &State {
 		main: Animation {
 			Keyframe {
@@ -220,6 +208,9 @@ func singleFrameState (path string) (state *State) {
 				picture:  loadPicture(path),
 			},
 		},
+
+		interest: interest,
+		variance: variance,
 	}
 }
 
