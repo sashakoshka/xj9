@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"time"
 	"image/color"
 	"github.com/faiface/pixel"
@@ -105,7 +104,6 @@ func draw () (updated bool) {
 
 	// resize window and sprite if needed
 	if window.Bounds() != picture.Bounds() {
-		println("chanign bounds")
 		previousBounds   := window.Bounds()
 		previousPosition := window.GetPos()
 		
@@ -117,8 +115,6 @@ func draw () (updated bool) {
 		window.SetBounds(picture.Bounds())
 
 		for {
-			fmt.Println(window.Bounds(), window.GetPos())
-			
 			if previousBounds != window.Bounds() &&
 				previousPosition != window.GetPos() {
 
