@@ -82,10 +82,16 @@ func currentAnimation () (animation Animation) {
 	}
 }
 
-func currentPicture () (pixel.Picture) {
+func currentPicture () (picture pixel.Picture) {
 	animation := currentAnimation()
-	if animation == nil { return nil }
+	if animation == nil { return }
 	return animation[playhead.frame].picture
+}
+
+func currentMotion () (vector pixel.Vec) {
+	animation := currentAnimation()
+	if animation == nil { return }
+	return animation[playhead.frame].motion
 }
 
 var frameDelay  time.Duration
@@ -125,6 +131,12 @@ func draw () (updated bool) {
 			window.UpdateInputWait(100 * time.Millisecond)
 		}
 		window.SwapBuffers()
+	}
+
+	// move window if needed
+	motion := currentMotion()
+	if motion != pixel.V(0, 0) {
+		window.SetPos(window.GetPos().Add(motion))
 	}
 
 	// draw image
@@ -188,15 +200,15 @@ func loadStates () {
 	states[stateIDLookNW] = singleFrameState("lookNW.png")
 	states[stateIDLookSW] = singleFrameState("lookSW.png")
 
-	// walkDelay := 200 * time.Millisecond
+	walkDelay := 200 * time.Millisecond
 	
-	// states[stateIDWalkE] = &State {
-		// main: cyclicAnimation("walkE", 4, walkDelay, pixel.V(8, 0)),
-	// }
-// 
-	// states[stateIDWalkW] = &State {
-		// main: cyclicAnimation("walkW", 4, walkDelay, pixel.V(-8, 0)),
-	// }
+	states[stateIDWalkE] = &State {
+		main: cyclicAnimation("walkE", 4, walkDelay, pixel.V(8, 0)),
+	}
+
+	states[stateIDWalkW] = &State {
+		main: cyclicAnimation("walkW", 4, walkDelay, pixel.V(-8, 0)),
+	}
 }
 
 func singleFrameState (path string) (state *State) {

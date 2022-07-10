@@ -58,8 +58,8 @@ func tick () {
 	switch (rand.Int() % 2) {
 	case 0: setState(stateIDSleeping)
 	
-	// case 2: setState(stateIDWalkE)
-	// case 3: setState(stateIDWalkW)
+	case 2: setState(stateIDWalkE)
+	case 3: setState(stateIDWalkW)
 	// case 4: setState(stateIDRocketN)
 	// case 5: setState(stateIDFallS)
 	}
