@@ -49,7 +49,7 @@ func setState (stateID StateID) {
 		playhead.pastIntro = true
 	}
 
-	setInterest(playhead.current.interest)
+	setInterest(playhead.current.interest, playhead.current.variance)
 }
 
 func currentAnimation () (animation Animation) {

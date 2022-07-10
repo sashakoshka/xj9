@@ -65,8 +65,8 @@ func tick () {
 	}
 }
 
-func setInterest (newInterest int) {
-	interest = newInterest
+func setInterest (newInterest, variance int) {
+	interest = newInterest + int(rand.Float64() * float64(variance))
 }
 
 var headCenter = pixel.Vec { X: 64, Y: 184 }
