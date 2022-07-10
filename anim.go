@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"time"
 	"image/color"
 	"github.com/faiface/pixel"
@@ -46,10 +47,10 @@ func setState (stateID StateID) {
 	setInterest(10)
 	switch (stateID) {
 	case stateIDIdle:
-		setInterest(20)
+		setInterest(2)
 		
 	case stateIDSleeping:
-		setInterest(40)
+		setInterest(4)
 		
 	case stateIDLook,
 	stateIDLookN,
@@ -203,11 +204,11 @@ func loadStates () {
 	walkDelay := 200 * time.Millisecond
 	
 	states[stateIDWalkE] = &State {
-		main: cyclicAnimation("walkE", 4, walkDelay, pixel.V(8, 0)),
+		main: cyclicAnimation("walkE", 4, walkDelay, pixel.V(16, 0)),
 	}
 
 	states[stateIDWalkW] = &State {
-		main: cyclicAnimation("walkW", 4, walkDelay, pixel.V(-8, 0)),
+		main: cyclicAnimation("walkW", 4, walkDelay, pixel.V(-16, 0)),
 	}
 }
 
@@ -234,6 +235,7 @@ func cyclicAnimation (
 		animation = append(animation, Keyframe {
 			duration: delay,
 			motion:   vector,
+			picture:  loadPicture(fmt.Sprint(path, frame, ".png")),
 		})
 	}
 

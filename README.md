@@ -1,6 +1,6 @@
 # Desktop Jenny
 
-![](images/idle0.png) ![](images/lookE.png) ![](images/lookNW.png)
+![](images/idle0.png) ![](images/lookE.png) ![](images/lookNW.png) ![](images/walkE2.png)
 
 Jenny Wakeman from My Life as a Teenage Robot, right on your desktop!
 
@@ -12,6 +12,7 @@ Jenny can:
 
 - Stare into your soul
 - Look at your mouse cursor
+- Walk
 - Sleep
 
 ## Building and running
