@@ -11,6 +11,7 @@ type Keyframe struct {
 	// duration randomly
 	duration time.Duration
 	picture  pixel.Picture
+	motion   pixel.Vec
 }
 
 type Animation []Keyframe
@@ -186,6 +187,16 @@ func loadStates () {
 	states[stateIDLookSE] = singleFrameState("lookSE.png")
 	states[stateIDLookNW] = singleFrameState("lookNW.png")
 	states[stateIDLookSW] = singleFrameState("lookSW.png")
+
+	// walkDelay := 200 * time.Millisecond
+	
+	// states[stateIDWalkE] = &State {
+		// main: cyclicAnimation("walkE", 4, walkDelay, pixel.V(8, 0)),
+	// }
+// 
+	// states[stateIDWalkW] = &State {
+		// main: cyclicAnimation("walkW", 4, walkDelay, pixel.V(-8, 0)),
+	// }
 }
 
 func singleFrameState (path string) (state *State) {
@@ -197,4 +208,22 @@ func singleFrameState (path string) (state *State) {
 			},
 		},
 	}
+}
+
+func cyclicAnimation (
+	path   string,
+	frames int,
+	delay  time.Duration,
+	vector pixel.Vec,
+) (
+	animation Animation,
+) {
+	for frame := 0; frame < frames; frame ++ {
+		animation = append(animation, Keyframe {
+			duration: delay,
+			motion:   vector,
+		})
+	}
+
+	return
 }
