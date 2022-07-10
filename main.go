@@ -1,6 +1,7 @@
 package main
 
 import "time"
+import "math/rand"
 import _ "image/png"
 import "github.com/faiface/pixel"
 import "github.com/faiface/pixel/pixelgl"
@@ -13,6 +14,8 @@ func main() {
 }
 
 func run() {
+	rand.Seed(time.Now().UnixNano())
+
 	var err error
 	window, err = pixelgl.NewWindow (pixelgl.WindowConfig{
 		Icon: []pixel.Picture {
