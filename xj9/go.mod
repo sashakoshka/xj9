@@ -1,4 +1,4 @@
-module github.com/sashakoshka/xj9
+module github.com/sashakoshka/xj9/xj9
 
 go 1.18
 
