@@ -18,6 +18,7 @@ var window *pixelgl.Window
 var images struct {
 	background 		pixel.Picture
 	folderFront		pixel.Picture
+	folderBack		pixel.Picture
 	
 	buttonAgree		pixel.Picture
 	buttonAgreePressed	pixel.Picture
@@ -32,6 +33,7 @@ var images struct {
 
 var sprites struct {
 	background	*pixel.Sprite
+	folderBack	*pixel.Sprite
 	folderFront	*pixel.Sprite
 	
 	button		*pixel.Sprite
@@ -76,6 +78,7 @@ func run() {
 	license = string(licenseBytes)
 
 	images.background  = loadPicture("installbg")
+	images.folderBack  = loadPicture("folderback")
 	images.folderFront = loadPicture("folderfront" + PLATFORM)
 
 	images.buttonAgree        = loadPicture("buttonagree")
@@ -97,6 +100,7 @@ func run() {
 
 	// create sprites
 	sprites.background  = makeSprite(images.background)
+	sprites.folderBack  = makeSprite(images.folderBack)
 	sprites.folderFront = makeSprite(images.folderFront)
 	
 	sprites.button        = makeSprite(images.buttonAgree)
@@ -153,6 +157,11 @@ func draw () (updated bool) {
 		
 	window.Clear(color.RGBA{0, 0, 0, 0})
 	drawSprite(sprites.background, 0, 0)
+	
+	drawSprite(sprites.status, 0, 0)
+	drawSprite(sprites.button, 0, 0)
+	
+	drawSprite(sprites.folderBack, 0, 0)
 	drawSprite(sprites.folderFront, 0, 0)
 	updated = true
 	return
