@@ -31,13 +31,15 @@ var images struct {
 }
 
 var sprites struct {
-	background    *pixel.Sprite
-	jenny         *pixel.Sprite
-	buttonClose   *pixel.Sprite
-	buttonQuit    *pixel.Sprite
-	buttonIconify *pixel.Sprite
-	folderFront   *pixel.Sprite
-	status        *pixel.Sprite
+	background	*pixel.Sprite
+	folderFront	*pixel.Sprite
+	
+	button		*pixel.Sprite
+	buttonQuit	*pixel.Sprite
+	buttonIconify	*pixel.Sprite
+	
+	status		*pixel.Sprite
+	delivery	*pixel.Sprite
 }
 
 var step int
@@ -96,6 +98,12 @@ func run() {
 	// create sprites
 	sprites.background  = makeSprite(images.background)
 	sprites.folderFront = makeSprite(images.folderFront)
+	
+	sprites.button        = makeSprite(images.buttonAgree)
+	sprites.buttonQuit    = makeSprite(images.buttonQuit)
+	sprites.buttonIconify = makeSprite(images.buttonIconify)
+	sprites.status        = makeSprite(images.statuses[stepLicense])
+	sprites.delivery      = makeSprite(images.delivery[0])
 
 	window.Update()
 
