@@ -66,8 +66,10 @@ func run() {
 	}
 }
 
+var installDone bool
+var installErr  error
 func install () {
-	
+	installDone = true
 }
 
 func loadPicture(path string) (picture pixel.Picture) {
