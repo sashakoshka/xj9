@@ -97,6 +97,9 @@ func draw () (updated bool) {
 		newPosition := window.GetPos()
 		newPosition.Y += yDifference
 		
+		window.Clear(color.RGBA{0, 0, 0, 0})
+		window.SwapBuffers()
+		
 		window.SetPos(newPosition)
 		window.SetBounds(picture.Bounds())
 
@@ -129,6 +132,7 @@ func draw () (updated bool) {
 	playhead.frame ++
 	if playhead.frame >= len(animation) {
 		 playhead.frame = 0
+		 playhead.pastIntro = true
 	}
 
 	return true
@@ -155,8 +159,8 @@ func loadStates () {
 			},
 		},
 
-		interest: 10,
-		variance: 10,
+		interest: 2,
+		variance: 18,
 	}
 	
 	states[stateIDSleeping] = &State {
@@ -186,17 +190,23 @@ func loadStates () {
 	states[stateIDLookSW] = singleFrameState("lookSW.png", 1, 0)
 
 	walkDelay := 200 * time.Millisecond
-	
 	states[stateIDWalkE] = &State {
 		main: cyclicAnimation("walkE", 4, walkDelay, pixel.V(16, 0)),
 		interest: 5,
 		variance: 5,
 	}
-
 	states[stateIDWalkW] = &State {
 		main: cyclicAnimation("walkW", 4, walkDelay, pixel.V(-16, 0)),
 		interest: 5,
 		variance: 5,
+	}
+
+	flyDelay := 100 * time.Millisecond
+	states[stateIDRocketN] = &State {
+		intro: cyclicAnimation("rocketN", 12, walkDelay, pixel.V(0, 0)),
+		main: cyclicAnimation("rocketNmain", 2, flyDelay, pixel.V(0, -32)),
+		interest: 5,
+		variance: 2,
 	}
 }
 
