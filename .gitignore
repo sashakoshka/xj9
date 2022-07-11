@@ -7,10 +7,7 @@
 *.dll
 *.so
 *.dylib
-/xj9
-
-# Log files
-hlhv.log
+/xj9/xj9
 
 # Test binary, built with `go test -c`
 *.test
