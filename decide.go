@@ -55,13 +55,13 @@ func tick () {
 		return
 	}
 
-	switch (rand.Int() % 4) {
+	switch (rand.Int() % 5) {
 	case 0: setState(stateIDSleeping)
 	
 	case 1: setState(stateIDWalkE)
 	case 2: setState(stateIDWalkW)
 	case 3: setState(stateIDRocketN)
-	// case 4: setState(stateIDFallS)
+	case 4: setState(stateIDFallS)
 	}
 }
 

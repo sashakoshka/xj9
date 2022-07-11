@@ -160,7 +160,7 @@ func loadStates () {
 		},
 
 		interest: 2,
-		variance: 18,
+		variance: 15,
 	}
 	
 	states[stateIDSleeping] = &State {
@@ -206,6 +206,18 @@ func loadStates () {
 		intro: cyclicAnimation("rocketN", 12, walkDelay, pixel.V(0, 0)),
 		main: cyclicAnimation("rocketNmain", 2, flyDelay, pixel.V(0, -32)),
 		interest: 5,
+		variance: 2,
+	}
+	
+	states[stateIDFallS] = &State {
+		main: Animation {
+			Keyframe {
+				duration: flyDelay,
+				picture:  loadPicture("fallS.png"),
+				motion:   pixel.V(0, 32),
+			},
+		},
+		interest: 1,
 		variance: 2,
 	}
 }

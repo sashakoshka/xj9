@@ -15,6 +15,7 @@ Jenny can:
 - Walk
 - Sleep
 - Fly with rocket boosters
+- Jump down
 
 ## Building and running
 
