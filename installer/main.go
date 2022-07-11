@@ -1,5 +1,6 @@
 package main
 
+import "fmt"
 import "time"
 import "image"
 import "embed"
@@ -10,12 +11,23 @@ import "github.com/faiface/pixel/pixelgl"
 
 //go:embed resources/*
 var resources embed.FS
+var license string
 
 var window *pixelgl.Window
 
 var images struct {
-	background  pixel.Picture
-	folderFront pixel.Picture
+	background 		pixel.Picture
+	folderFront		pixel.Picture
+	
+	buttonAgree		pixel.Picture
+	buttonAgreePressed	pixel.Picture
+	buttonClose		pixel.Picture
+	buttonClosePressed	pixel.Picture
+	buttonIconify		pixel.Picture
+	buttonQuit		pixel.Picture
+	
+	statuses		[4]pixel.Picture
+	delivery		[9]pixel.Picture
 }
 
 var sprites struct {
@@ -25,14 +37,23 @@ var sprites struct {
 	buttonQuit    *pixel.Sprite
 	buttonIconify *pixel.Sprite
 	folderFront   *pixel.Sprite
+	status        *pixel.Sprite
 }
+
+var step int
+
+const (
+	stepLicense = iota
+	stepInstall
+	stepDone
+	stepError
+)
 
 func main() {
 	pixelgl.Run(run)
 }
 
 func run() {
-
 	var err error
 	window, err = pixelgl.NewWindow (pixelgl.WindowConfig{
 		Icon: []pixel.Picture {
@@ -48,9 +69,31 @@ func run() {
 	})
 	if err != nil { panic(err) }
 
+	// load files
+	licenseBytes, _ := resources.ReadFile("LICENSE")
+	license = string(licenseBytes)
+
 	images.background  = loadPicture("installbg")
 	images.folderFront = loadPicture("folderfront" + PLATFORM)
 
+	images.buttonAgree        = loadPicture("buttonagree")
+	images.buttonAgreePressed = loadPicture("buttonagreepressed")
+	images.buttonClose        = loadPicture("buttonclose")
+	images.buttonClosePressed = loadPicture("buttonclosepressed")
+	images.buttonIconify      = loadPicture("buttoniconify")
+	images.buttonQuit         = loadPicture("buttonquit")
+
+	images.statuses[stepLicense] = loadPicture("statuslicense")
+	images.statuses[stepInstall] = loadPicture("statusinstalling")
+	images.statuses[stepDone]    = loadPicture("statusinstalled")
+	images.statuses[stepError]   = loadPicture("statuserror")
+
+	for frame := 0; frame < len(images.delivery); frame ++ {
+		images.delivery[frame] = loadPicture (
+			fmt.Sprint("delivery", frame))
+	}
+
+	// create sprites
 	sprites.background  = makeSprite(images.background)
 	sprites.folderFront = makeSprite(images.folderFront)
 
