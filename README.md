@@ -14,6 +14,7 @@ Jenny can:
 - Look at your mouse cursor
 - Walk
 - Sleep
+- Fly with rocket boosters
 
 ## Building and running
 
