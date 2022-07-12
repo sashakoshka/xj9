@@ -9,6 +9,7 @@
 *.dylib
 /xj9/xj9
 /installer/installer
+/installer/package
 
 # Test binary, built with `go test -c`
 *.test
