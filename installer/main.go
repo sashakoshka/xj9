@@ -184,7 +184,7 @@ func run() {
 
 		if window.Closed() { break }
 		if step == stepInstall {
-			window.UpdateInputWait(500 * time.Millisecond)
+			window.UpdateInputWait(200 * time.Millisecond)
 		} else {
 			window.UpdateInputWait(5 * time.Second)
 		}
@@ -210,12 +210,16 @@ func loadPicture(path string) (picture pixel.Picture) {
 	return pixel.PictureDataFromImage(img)
 }
 
-func makeSprite(picture pixel.Picture) (sprite *pixel.Sprite) {
+func makeSprite (picture pixel.Picture) (sprite *pixel.Sprite) {
 	return pixel.NewSprite(picture, picture.Bounds())
 }
 
-func setButton(picture pixel.Picture) {
+func setButton (picture pixel.Picture) {
 	sprites.button.Set(picture, picture.Bounds())
+}
+
+func setDelivery (picture pixel.Picture) {
+	sprites.delivery.Set(picture, picture.Bounds())
 }
 
 func setStep (newStep int) {
@@ -246,17 +250,13 @@ func drawSprite(sprite *pixel.Sprite, x, y float64) {
 		pixel.IM.Moved(window.Bounds().Center()).Moved(pixel.V(x, y)))
 }
 
-var lastDrawn time.Time
+var lastFrameDrawnTime time.Time
 func draw (force bool) (updated bool) {
-	drawingFrame := time.Since(lastDrawn) < 500 * time.Millisecond &&
+	needFrameChange :=
+		time.Since(lastFrameDrawnTime) > 200 * time.Millisecond &&
 		step == stepInstall
 	
-	if !(drawingFrame || force) {
-		return
-	}
-	lastDrawn = time.Now()
-
-	println("draw")
+	if !needFrameChange && !force { return }
 
 	// draw
 	window.Clear(color.RGBA{0, 0, 0, 0})
@@ -271,7 +271,11 @@ func draw (force bool) (updated bool) {
 		drawSprite(sprites.buttonIconify, 175, 146)
 	}
 
-	if step != stepInstall {
+	if step == stepInstall {
+		drawSprite(sprites.folderBack, 0, 0)
+		drawSprite(sprites.delivery, 0, 0)
+		drawSprite(sprites.folderFront, 0, 0)
+	} else {
 		buttonPressed :=
 			dragStartFocus == &bounds.button &&
 			mousePressed
@@ -291,13 +295,17 @@ func draw (force bool) (updated bool) {
 		}
 		drawSprite(sprites.button, 0, 0)
 	}
-	
-	if !force && step == stepInstall{
+
+	// TODO: this changes speed when mousing over button bounds, fix
+	if needFrameChange {
 		// update animations
+		lastFrameDrawnTime = time.Now()
 		deliveryFrame ++
-		if deliveryFrame > len(images.delivery) {
+		if deliveryFrame >= len(images.delivery) {
 			deliveryFrame = 0
 		}
+		
+		setDelivery(images.delivery[deliveryFrame])
 	}
 	return true
 }
