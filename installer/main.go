@@ -12,9 +12,11 @@ import "github.com/faiface/pixel/pixelgl"
 
 //go:embed resources/*
 var resources embed.FS
-var license string
+var license       string
+var licenseScroll int
 
 var window *pixelgl.Window
+var running = true
 
 var images struct {
 	background 		pixel.Picture
@@ -128,34 +130,59 @@ func run() {
 	sprites.delivery      = makeSprite(images.delivery[0])
 
 	window.Update()
+	setStep(stepLicense)
 	forceRedraw := true
 
-	for !window.Closed() {
-		mousePosition = window.MousePosition()
-
+	for {
 		previousFocus := focus
+		previousStep  := step
+
+		// get mouse position
+		mousePosition = window.MousePosition()
 		focus = nil
 		_ =	checkMouseIn(&bounds.button)     ||
 			checkMouseIn(&bounds.buttonQuit) ||
 			checkMouseIn(&bounds.buttonIconify)
-		forceRedraw = forceRedraw || (previousFocus != focus)
-		
+		inputChange := previousFocus != focus
+		if previousFocus != focus {
+			forceRedraw = true
+		}
+
+		// get mouse press
 		if window.JustPressed(pixelgl.MouseButton1) {
 			mousePressed   = true
-			forceRedraw    = true
+			inputChange    = true
 			dragStartFocus = focus
+
+			if focus != nil {
+				forceRedraw = true
+			}
 		}
 		if window.JustReleased(pixelgl.MouseButton1) {
 			mousePressed   = false
-			forceRedraw    = true
-			dragStartFocus = nil
+			inputChange    = true
+
+			if focus != nil || dragStartFocus != nil {
+				forceRedraw = true
+			}
+		}
+
+		// react to input and redraw
+		if inputChange {
+			reactToInput()
 		}
 
 		if draw(forceRedraw) {
 			window.SwapBuffers()
 		}
-		forceRedraw = false
 
+		// reset state variables
+		if window.JustReleased(pixelgl.MouseButton1) {
+			dragStartFocus = nil
+		}
+		forceRedraw = step != previousStep
+
+		if window.Closed() { break }
 		if step == stepInstall {
 			window.UpdateInputWait(500 * time.Millisecond)
 		} else {
@@ -191,13 +218,35 @@ func setButton(picture pixel.Picture) {
 	sprites.button.Set(picture, picture.Bounds())
 }
 
+func setStep (newStep int) {
+	statusPicture := images.statuses[newStep]
+	sprites.status.Set(statusPicture, statusPicture.Bounds())
+	step = newStep
+	
+	switch newStep {
+	case stepLicense:
+		licenseScroll = 0
+		
+	case stepInstall:
+		deliveryFrame = 0
+		installDone = false
+		installErr  = nil
+		go install()
+		
+	case stepDone:
+		
+	case stepError:
+	
+	}
+}
+
 func drawSprite(sprite *pixel.Sprite, x, y float64) {
 	sprite.Draw (
 		window,
 		pixel.IM.Moved(window.Bounds().Center()).Moved(pixel.V(x, y)))
 }
 
-var lastDrawn   time.Time
+var lastDrawn time.Time
 func draw (force bool) (updated bool) {
 	drawingFrame := time.Since(lastDrawn) < 500 * time.Millisecond &&
 		step == stepInstall
@@ -253,9 +302,37 @@ func draw (force bool) (updated bool) {
 	return true
 }
 
-func checkMouseIn (bounds *pixel.Rect) (inside bool) {
-	if bounds.Contains(mousePosition) {
-		focus = bounds
+func reactToInput () {
+
+	// check button presses
+	if (mouseActivated(&bounds.buttonQuit)) {
+		// TODO: disable while installing
+		window.SetClosed(true)
+		running = false
+	}
+
+	if step != stepInstall {
+		if mouseActivated(&bounds.button) {
+			if step == stepLicense {
+				setStep(stepInstall)
+			} else {
+				window.SetClosed(true)
+				running = false
+			}
+			return
+		}
+	}
+}
+
+func mouseActivated (bound *pixel.Rect) (activated bool) {
+	return	focus          == bound &&
+		dragStartFocus == bound &&
+		window.JustReleased(pixelgl.MouseButton1)
+}
+
+func checkMouseIn (bound *pixel.Rect) (inside bool) {
+	if bound.Contains(mousePosition) {
+		focus = bound
 		return true
 	}
 
