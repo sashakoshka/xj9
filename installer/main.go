@@ -7,6 +7,7 @@ import "embed"
 import "image/color"
 import _ "image/png"
 import "github.com/faiface/pixel"
+// import "github.com/faiface/pixel/text"
 import "github.com/faiface/pixel/pixelgl"
 
 //go:embed resources/*
@@ -44,7 +45,8 @@ var sprites struct {
 	delivery	*pixel.Sprite
 }
 
-var step int
+var step          int
+var deliveryFrame int
 
 const (
 	stepLicense = iota
@@ -52,6 +54,18 @@ const (
 	stepDone
 	stepError
 )
+
+var mousePosition pixel.Vec
+var mousePressed  bool
+
+var bounds struct {
+	button		pixel.Rect
+	buttonQuit	pixel.Rect
+	buttonIconify	pixel.Rect
+}
+
+var dragStartFocus *pixel.Rect
+var focus          *pixel.Rect
 
 func main() {
 	pixelgl.Run(run)
@@ -72,6 +86,10 @@ func run() {
 		VSync:                  true,
 	})
 	if err != nil { panic(err) }
+
+	bounds.button        = Bounds(35, 19, 83, 49)
+	bounds.buttonQuit    = Bounds(455, 327, 18, 18)
+	bounds.buttonIconify = Bounds(422, 327, 18, 18)
 
 	// load files
 	licenseBytes, _ := resources.ReadFile("LICENSE")
@@ -110,14 +128,39 @@ func run() {
 	sprites.delivery      = makeSprite(images.delivery[0])
 
 	window.Update()
+	forceRedraw := true
 
 	for !window.Closed() {
-		// mousePosition := window.MousePosition()
+		mousePosition = window.MousePosition()
 
-		if draw() {
+		previousFocus := focus
+		focus = nil
+		_ =	checkMouseIn(&bounds.button)     ||
+			checkMouseIn(&bounds.buttonQuit) ||
+			checkMouseIn(&bounds.buttonIconify)
+		forceRedraw = forceRedraw || (previousFocus != focus)
+		
+		if window.JustPressed(pixelgl.MouseButton1) {
+			mousePressed   = true
+			forceRedraw    = true
+			dragStartFocus = focus
+		}
+		if window.JustReleased(pixelgl.MouseButton1) {
+			mousePressed   = false
+			forceRedraw    = true
+			dragStartFocus = nil
+		}
+
+		if draw(forceRedraw) {
 			window.SwapBuffers()
 		}
-		window.UpdateInputWait(500 * time.Millisecond)
+		forceRedraw = false
+
+		if step == stepInstall {
+			window.UpdateInputWait(500 * time.Millisecond)
+		} else {
+			window.UpdateInputWait(5 * time.Second)
+		}
 	}
 }
 
@@ -144,25 +187,81 @@ func makeSprite(picture pixel.Picture) (sprite *pixel.Sprite) {
 	return pixel.NewSprite(picture, picture.Bounds())
 }
 
+func setButton(picture pixel.Picture) {
+	sprites.button.Set(picture, picture.Bounds())
+}
+
 func drawSprite(sprite *pixel.Sprite, x, y float64) {
 	sprite.Draw (
 		window,
-		pixel.IM.Moved(window.Bounds().Center()))
+		pixel.IM.Moved(window.Bounds().Center()).Moved(pixel.V(x, y)))
 }
 
-var lastDrawn  time.Time
-func draw () (updated bool) {
-	if time.Since(lastDrawn) < 500 * time.Millisecond { return }
+var lastDrawn   time.Time
+func draw (force bool) (updated bool) {
+	drawingFrame := time.Since(lastDrawn) < 500 * time.Millisecond &&
+		step == stepInstall
+	
+	if !(drawingFrame || force) {
+		return
+	}
 	lastDrawn = time.Now()
-		
+
+	println("draw")
+
+	// draw
 	window.Clear(color.RGBA{0, 0, 0, 0})
 	drawSprite(sprites.background, 0, 0)
-	
 	drawSprite(sprites.status, 0, 0)
-	drawSprite(sprites.button, 0, 0)
+
+	if focus == &bounds.buttonQuit {
+		drawSprite(sprites.buttonQuit, 208, 146)
+	}
+
+	if focus == &bounds.buttonIconify {
+		drawSprite(sprites.buttonIconify, 175, 146)
+	}
+
+	if step != stepInstall {
+		buttonPressed :=
+			dragStartFocus == &bounds.button &&
+			mousePressed
+		
+		if step == stepLicense {
+			if buttonPressed {
+				setButton(images.buttonAgreePressed)
+			} else {
+				setButton(images.buttonAgree)
+			}
+		} else {
+			if buttonPressed {
+				setButton(images.buttonClosePressed)
+			} else {
+				setButton(images.buttonClose)
+			}
+		}
+		drawSprite(sprites.button, 0, 0)
+	}
 	
-	drawSprite(sprites.folderBack, 0, 0)
-	drawSprite(sprites.folderFront, 0, 0)
-	updated = true
+	if !force && step == stepInstall{
+		// update animations
+		deliveryFrame ++
+		if deliveryFrame > len(images.delivery) {
+			deliveryFrame = 0
+		}
+	}
+	return true
+}
+
+func checkMouseIn (bounds *pixel.Rect) (inside bool) {
+	if bounds.Contains(mousePosition) {
+		focus = bounds
+		return true
+	}
+
 	return
+}
+
+func Bounds (x, y, width, height float64) (pixel.Rect) {
+	return pixel.R(x, y, x + width, y + height)
 }
