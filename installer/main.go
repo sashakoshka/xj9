@@ -181,6 +181,7 @@ func run() {
 			dragStartFocus = nil
 		}
 		forceRedraw = step != previousStep
+		if forceRedraw { continue }
 
 		if window.Closed() { break }
 		if step == stepInstall {
@@ -191,9 +192,15 @@ func run() {
 	}
 }
 
+var installing  bool
 var installDone bool
 var installErr  error
 func install () {
+	installing = true
+
+	// TODO: install
+	
+	installing = false
 	installDone = true
 }
 
@@ -303,6 +310,14 @@ func draw (force bool) (updated bool) {
 		deliveryFrame ++
 		if deliveryFrame >= len(images.delivery) {
 			deliveryFrame = 0
+
+			if installDone {
+				if installErr != nil {
+					setStep(stepError)
+				} else {
+					setStep(stepDone)
+				}
+			}
 		}
 		
 		setDelivery(images.delivery[deliveryFrame])
@@ -313,8 +328,7 @@ func draw (force bool) (updated bool) {
 func reactToInput () {
 
 	// check button presses
-	if (mouseActivated(&bounds.buttonQuit)) {
-		// TODO: disable while installing
+	if (mouseActivated(&bounds.buttonQuit) && !installing) {
 		window.SetClosed(true)
 		running = false
 	}
