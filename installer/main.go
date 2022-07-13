@@ -4,15 +4,20 @@ import "fmt"
 import "time"
 import "image"
 import "embed"
+import "bufio"
 import "image/color"
 import _ "image/png"
 import "github.com/faiface/pixel"
-// import "github.com/faiface/pixel/text"
+import "github.com/faiface/pixel/text"
 import "github.com/faiface/pixel/pixelgl"
+import "golang.org/x/image/font/basicfont"
+
+// TODO: use https://golangexample.com/an-implementation-of-the-filesystem-interface-for-tar-files/
+// to get filesystem from package/package.tar.xz and extract into host system
 
 //go:embed resources/*
 var resources embed.FS
-var license       string
+var license = []string { "" }
 var licenseScroll int
 
 var window *pixelgl.Window
@@ -45,6 +50,8 @@ var sprites struct {
 	
 	status		*pixel.Sprite
 	delivery	*pixel.Sprite
+
+	license         *text.Text
 }
 
 var step          int
@@ -57,17 +64,18 @@ const (
 	stepError
 )
 
-var mousePosition pixel.Vec
-var mousePressed  bool
-
 var bounds struct {
 	button		pixel.Rect
 	buttonQuit	pixel.Rect
 	buttonIconify	pixel.Rect
 }
 
+var mousePosition pixel.Vec
+var mousePressed  bool
 var dragStartFocus *pixel.Rect
 var focus          *pixel.Rect
+
+var fontAtlas = text.NewAtlas(basicfont.Face7x13, text.ASCII)
 
 func main() {
 	pixelgl.Run(run)
@@ -94,8 +102,7 @@ func run() {
 	bounds.buttonIconify = Bounds(422, 327, 18, 18)
 
 	// load files
-	licenseBytes, _ := resources.ReadFile("LICENSE")
-	license = string(licenseBytes)
+	loadLicense()
 
 	images.background  = loadPicture("installbg")
 	images.folderBack  = loadPicture("folderback")
@@ -126,8 +133,14 @@ func run() {
 	sprites.button        = makeSprite(images.buttonAgree)
 	sprites.buttonQuit    = makeSprite(images.buttonQuit)
 	sprites.buttonIconify = makeSprite(images.buttonIconify)
-	sprites.status        = makeSprite(images.statuses[stepLicense])
-	sprites.delivery      = makeSprite(images.delivery[0])
+	
+	sprites.status   = makeSprite(images.statuses[stepLicense])
+	sprites.delivery = makeSprite(images.delivery[0])
+	
+	sprites.license = text.New(pixel.V(40, 236), fontAtlas)
+	sprites.license.Color = color.RGBA{0x15, 0x5b, 0x62, 0xFF}
+	
+	sprites.license.Write([]byte(license[0]))
 
 	window.Update()
 	setStep(stepLicense)
@@ -190,6 +203,26 @@ func run() {
 			window.UpdateInputWait(5 * time.Second)
 		}
 	}
+}
+
+func loadLicense () {
+	file, err := resources.Open("resources/LICENSE")
+	if err != nil { panic(err) }
+	scanner := bufio.NewScanner(file)
+
+	var splitCounter int
+	for scanner.Scan() {
+		text := scanner.Text()
+		if splitCounter > 11 {
+			splitCounter = 0
+			license = append(license, "")
+		}
+
+		license[len(license) - 1] += text + "\n"
+
+		splitCounter ++
+	}
+	file.Close()
 }
 
 var installing  bool
@@ -276,6 +309,10 @@ func draw (force bool) (updated bool) {
 
 	if focus == &bounds.buttonIconify {
 		drawSprite(sprites.buttonIconify, 175, 146)
+	}
+
+	if step == stepLicense {
+		sprites.license.Draw(window, pixel.IM)
 	}
 
 	if step == stepInstall {
