@@ -140,7 +140,7 @@ func run() {
 	sprites.license = text.New(pixel.V(40, 236), fontAtlas)
 	sprites.license.Color = color.RGBA{0x15, 0x5b, 0x62, 0xFF}
 	
-	sprites.license.Write([]byte(license[0]))
+	sprites.license.Write([]byte(license[licenseScroll]))
 
 	window.Update()
 	setStep(stepLicense)
@@ -178,6 +178,10 @@ func run() {
 			if focus != nil || dragStartFocus != nil {
 				forceRedraw = true
 			}
+		}
+		if window.MouseScroll().Y != 0 {
+			forceRedraw = true
+			inputChange = true
 		}
 
 		// react to input and redraw
@@ -363,7 +367,20 @@ func draw (force bool) (updated bool) {
 }
 
 func reactToInput () {
+	// check scroll wheel
+	if step == stepLicense {
+		licenseScroll += -int(window.MouseScroll().Y)
+		if licenseScroll >= len(license) {
+			licenseScroll = len(license) - 1
+		}
+		if licenseScroll <= 0 {
+			licenseScroll = 0
+		}
 
+		sprites.license.Clear()
+		sprites.license.Write([]byte(license[licenseScroll]))
+	}
+	
 	// check button presses
 	if (mouseActivated(&bounds.buttonQuit) && !installing) {
 		window.SetClosed(true)
