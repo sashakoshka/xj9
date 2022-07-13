@@ -1,5 +1,5 @@
-                    GNU GENERAL PUBLIC LICENSE 
-                      Version 3, 29 June 2007 
+                GNU GENERAL PUBLIC LICENSE 
+                 Version 3, 29 June 2007 
 
 Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf
 .org/> 
@@ -234,39 +234,26 @@ ons to produce it from the Program, in the form of source code
  of these conditions: 
 
    a) The work must carry prominent notices stating that you m
-odified 
-   it, and giving a relevant date. 
+      odified it, and giving a relevant date. 
 
    b) The work must carry prominent notices stating that it is
- 
-   released under this License and any conditions added under 
-section 
-   7.  This requirement modifies the requirement in section 4 
-to 
-   "keep intact all notices". 
+      released under this License and any conditions added und
+      er section 7.  This requirement modifies the requirement
+      in section 4 to "keep intact all notices". 
 
    c) You must license the entire work, as a whole, under this
- 
-   License to anyone who comes into possession of a copy.  Thi
-s 
-   License will therefore apply, along with any applicable sec
-tion 7 
-   additional terms, to the whole of the work, and all its par
-ts, 
-   regardless of how they are packaged.  This License gives no
- 
-   permission to license the work in any other way, but it doe
-s not 
-   invalidate such permission if you have separately received 
-it. 
+      License to anyone who comes into possession of a copy.
+      This License will therefore apply, along with any applic
+      able section 7 additional terms, to the whole of the wor
+      k, and all its parts, regardless of how they are package
+      d.  This License gives no permission to license the work
+      in any other way, but it does not invalidate such permis
+      sion if you have separately received it. 
 
    d) If the work has interactive user interfaces, each must d
-isplay 
-   Appropriate Legal Notices; however, if the Program has inte
-ractive 
-   interfaces that do not display Appropriate Legal Notices, y
-our 
-   work need not make them do so. 
+      isplay Appropriate Legal Notices; however, if the Progra
+      m has interactive interfaces that do not display Appropr
+      iate Legal Notices, your work need not make them do so. 
 
  A compilation of a covered work with other separate and indep
 endent works, which are not by their nature extensions of the 
@@ -287,73 +274,48 @@ chine-readable Corresponding Source under the terms of this Li
 cense, in one of these ways: 
 
    a) Convey the object code in, or embodied in, a physical pr
-oduct 
-   (including a physical distribution medium), accompanied by 
-the 
-   Corresponding Source fixed on a durable physical medium 
-   customarily used for software interchange. 
+      oduct (including a physical distribution medium), accomp
+      anied by the Corresponding Source fixed on a durable phy
+      sical medium customarily used for software interchange. 
 
    b) Convey the object code in, or embodied in, a physical pr
-oduct 
-   (including a physical distribution medium), accompanied by 
-a 
-   written offer, valid for at least three years and valid for
- as 
-   long as you offer spare parts or customer support for that 
-product 
-   model, to give anyone who possesses the object code either 
-(1) a 
-   copy of the Corresponding Source for all the software in th
-e 
-   product that is covered by this License, on a durable physi
-cal 
-   medium customarily used for software interchange, for a pri
-ce no 
-   more than your reasonable cost of physically performing thi
-s 
-   conveying of source, or (2) access to copy the 
-   Corresponding Source from a network server at no charge. 
+      oduct (including a physical distribution medium), accomp
+      anied by a written offer, valid for at least three years
+      and valid for as long as you offer spare parts or custom
+      er support for that product model, to give anyone who po
+      ssesses the object code either (1) a copy of the Corresp
+      onding Source for all the software in the product that i
+      s covered by this License, on a durable physical medium 
+      customarily used for software interchange, for a price n
+      o more than your reasonable cost of physically performin
+      g this conveying of source, or (2) access to copy the Co
+      rresponding Source from a network server at no charge. 
 
    c) Convey individual copies of the object code with a copy 
-of the 
-   written offer to provide the Corresponding Source.  This 
-   alternative is allowed only occasionally and noncommerciall
-y, and 
-   only if you received the object code with such an offer, in
- accord 
-   with subsection 6b. 
+      of the written offer to provide the Corresponding Source
+      .  This alternative is allowed only occasionally and non
+      commercially, and only if you received the object code w
+      ith such an offer, in accord with subsection 6b. 
 
    d) Convey the object code by offering access from a designa
-ted 
-   place (gratis or for a charge), and offer equivalent access
- to the 
-   Corresponding Source in the same way through the same place
- at no 
-   further charge.  You need not require recipients to copy th
-e 
-   Corresponding Source along with the object code.  If the pl
-ace to 
-   copy the object code is a network server, the Corresponding
- Source 
-   may be on a different server (operated by you or a third pa
-rty) 
-   that supports equivalent copying facilities, provided you m
-aintain 
-   clear directions next to the object code saying where to fi
-nd the 
-   Corresponding Source.  Regardless of what server hosts the 
-   Corresponding Source, you remain obligated to ensure that i
-t is 
-   available for as long as needed to satisfy these requiremen
-ts. 
+      ted place (gratis or for a charge), and offer equivalent
+      access to the Corresponding Source in the same way throu
+      gh the same place at no further charge.  You need not re
+      quire recipients to copy the Corresponding Source along
+      with the object code.  If the place to copy the object c
+      ode is a network server, the Corresponding Source may be
+      on a different server (operated by you or a third party) 
+      that supports equivalent copying facilities, provided yo
+      u maintain clear directions next to the object code sayi
+      ng where to find the Corresponding Source.  Regardless o
+      f what server hosts the Corresponding Source, you remain
+      obligated to ensure that it is available for as long as
+      needed to satisfy these requirements. 
 
-   e) Convey the object code using peer-to-peer transmission, 
-provided 
-   you inform other peers where the object code and Correspond
-ing 
-   Source of the work are being offered to the general public 
-at no 
-   charge under subsection 6d. 
+   e) Convey the object code using peer-to-peer transmission, p
+   rovided you inform other peers where the object code and Cor
+   responding Source of the work are being offered to the gener
+   al public at no charge under subsection 6d. 
 
  A separable portion of the object code, whose source code is 
 excluded from the Corresponding Source as a System Library, ne
@@ -436,38 +398,30 @@ copyright holders of that material) supplement the terms of th
 is License with terms: 
 
    a) Disclaiming warranty or limiting liability differently f
-rom the 
-   terms of sections 15 and 16 of this License; or 
+      rom the terms of sections 15 and 16 of this License; or 
 
    b) Requiring preservation of specified reasonable legal not
-ices or 
-   author attributions in that material or in the Appropriate 
-Legal 
-   Notices displayed by works containing it; or 
+      ices or author attributions in that material or in the A
+      ppropriate Legal Notices displayed by works containing i
+      t; or 
 
    c) Prohibiting misrepresentation of the origin of that mate
-rial, or 
-   requiring that modified versions of such material be marked
- in 
-   reasonable ways as different from the original version; or 
+      rial, or requiring that modified versions of such materi
+      al be marked in reasonable ways as different from the or
+      iginal version; or 
 
    d) Limiting the use for publicity purposes of names of lice
-nsors or 
-   authors of the material; or 
+      nsors or authors of the material; or 
 
    e) Declining to grant rights under trademark law for use of
- some 
-   trade names, trademarks, or service marks; or 
+      some trade names, trademarks, or service marks; or 
 
    f) Requiring indemnification of licensors and authors of th
-at 
-   material by anyone who conveys the material (or modified ve
-rsions of 
-   it) with contractual assumptions of liability to the recipi
-ent, for 
-   any liability that these contractual assumptions directly i
-mpose on 
-   those licensors and authors. 
+      at material by anyone who conveys the material (or modif
+      ied versions of it) with contractual assumptions of liab
+      ility to the recipient, for any liability that these con
+      tractual assumptions directly impose on those licensors
+      and authors. 
 
  All other non-permissive additional terms are considered "fur
 ther restrictions" within the meaning of section 10.  If the P
