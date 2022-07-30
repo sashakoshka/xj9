@@ -5,6 +5,7 @@ import "time"
 import "image"
 import "embed"
 import "bufio"
+import "archive/tar"
 import "image/color"
 import _ "image/png"
 import "github.com/faiface/pixel"
@@ -15,8 +16,13 @@ import "golang.org/x/image/font/basicfont"
 // TODO: use https://golangexample.com/an-implementation-of-the-filesystem-interface-for-tar-files/
 // to get filesystem from package/package.tar.xz and extract into host system
 
-//go:embed resources/*
+//go:embed resources/* package/package.tar.xz
 var resources embed.FS
+
+var files {
+	
+}
+
 var license = []string { "" }
 var licenseScroll int
 
@@ -227,6 +233,10 @@ func loadLicense () {
 		splitCounter ++
 	}
 	file.Close()
+}
+
+func loadInstallFiles () {
+	
 }
 
 var installing  bool
